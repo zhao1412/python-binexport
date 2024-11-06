@@ -113,3 +113,9 @@ class BasicBlockBinExport:
                 )
 
         return instructions
+
+    @property
+    def end(self) -> Addr:
+        instructions = [addr for addr in self.instructions.keys()]
+        instructions.sort()
+        return instructions[len(instructions)-1]

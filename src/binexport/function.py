@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 from binexport.utils import get_basic_block_addr, logger
 from binexport.basic_block import BasicBlockBinExport
 from binexport.types import FunctionType
+from binexport.instruction import InstructionBinExport
 
 if TYPE_CHECKING:
     from collections import abc
@@ -271,3 +272,16 @@ class FunctionBinExport:
         Returns whether or not the function is an import
         """
         return self.type == FunctionType.IMPORTED
+
+    @property
+    def instructions(self) -> dict[Addr, InstructionBinExport]:
+        instructions = {}
+        for addr, blk in self.blocks:
+            instructions.update(blk.instructions)
+        return instructions
+    
+    @property
+    def end(self) -> Addr:
+        instructions = [addr for addr in self.instructions.keys()]
+        instructions.sort()
+        return instructions[len(instructions)-1]
