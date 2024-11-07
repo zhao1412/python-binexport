@@ -276,12 +276,14 @@ class FunctionBinExport:
     @property
     def instructions(self) -> dict[Addr, InstructionBinExport]:
         instructions = {}
-        for addr, blk in self.blocks:
+        for addr, blk in self.blocks.items():
             instructions.update(blk.instructions)
         return instructions
     
     @property
-    def end(self) -> Addr:
+    def end(self) -> Addr | None:
+        if self.is_import():
+            return None
         instructions = [addr for addr in self.instructions.keys()]
         instructions.sort()
         return instructions[len(instructions)-1]
